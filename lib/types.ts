@@ -1,5 +1,5 @@
 export type ItemStatus = 'draft' | 'live' | 'reserved' | 'sold' | 'expired';
-export type BuyerStatus = 'active' | 'paused' | 'blocked';
+export type BuyerStatus = 'prospect' | 'active' | 'paused' | 'blocked';
 export type RecipientStatus = 'queued' | 'sent' | 'opened' | 'checkout_started' | 'paid' | 'expired' | 'failed';
 
 export type AssetFile = {
