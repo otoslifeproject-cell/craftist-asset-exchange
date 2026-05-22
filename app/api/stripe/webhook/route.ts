@@ -1,0 +1,73 @@
+import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
+import { getStripe } from '../../../../lib/stripe';
+import { requiredEnv } from '../../../../lib/env';
+import { supabaseAdmin } from '../../../../lib/supabaseAdmin';
+import { notifyAdmin } from '../../../../lib/email';
+
+export const runtime = 'nodejs';
+
+export async function POST(req: Request) {
+  const body = await req.text();
+  const sig = req.headers.get('stripe-signature');
+  if (!sig) return new NextResponse('Missing stripe-signature', { status: 400 });
+
+  let event: Stripe.Event;
+  try {
+    event = getStripe().webhooks.constructEvent(body, sig, requiredEnv('STRIPE_WEBHOOK_SECRET'));
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Webhook verification failed';
+    return new NextResponse(message, { status: 400 });
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as Stripe.Checkout.Session;
+    const itemId = session.metadata?.item_id;
+    const buyerId = session.metadata?.buyer_id;
+    const recipientId = session.metadata?.recipient_id;
+    const token = session.metadata?.token;
+
+    if (itemId && buyerId && recipientId) {
+      const supabase = supabaseAdmin();
+      const paidAt = new Date().toISOString();
+      await supabase.from('items').update({
+        status: 'sold',
+        sold_at: paidAt,
+        reserved_until: null,
+        reserved_token: token || null,
+        updated_at: paidAt
+      }).eq('id', itemId);
+
+      await supabase.from('alert_recipients').update({ status: 'paid', paid_at: paidAt }).eq('id', recipientId);
+
+      await supabase.from('orders').update({
+        status: 'paid',
+        paid_at: paidAt,
+        stripe_payment_intent_id: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id || null,
+        stripe_customer_id: typeof session.customer === 'string' ? session.customer : session.customer?.id || null,
+        shipping_details: session.shipping_details || null,
+        customer_details: session.customer_details || null
+      }).eq('stripe_session_id', session.id);
+
+      await notifyAdmin('PAID: Craftist asset sold', `<p>Stripe session ${session.id} completed.</p><p>Item: ${itemId}<br/>Buyer: ${buyerId}</p>`);
+    }
+  }
+
+  if (event.type === 'checkout.session.expired') {
+    const session = event.data.object as Stripe.Checkout.Session;
+    const itemId = session.metadata?.item_id;
+    const recipientId = session.metadata?.recipient_id;
+    const token = session.metadata?.token;
+    if (itemId && recipientId) {
+      const supabase = supabaseAdmin();
+      const { data: item } = await supabase.from('items').select('reserved_token,status').eq('id', itemId).single();
+      if (item?.status === 'reserved' && item?.reserved_token === token) {
+        await supabase.from('items').update({ status: 'live', reserved_token: null, reserved_until: null }).eq('id', itemId);
+      }
+      await supabase.from('orders').update({ status: 'expired' }).eq('stripe_session_id', session.id);
+      await supabase.from('alert_recipients').update({ status: 'opened' }).eq('id', recipientId).eq('status', 'checkout_started');
+    }
+  }
+
+  return NextResponse.json({ received: true });
+}
