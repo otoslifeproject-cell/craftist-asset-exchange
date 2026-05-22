@@ -3,15 +3,66 @@ import { supabaseAdmin } from '../../lib/supabaseAdmin';
 import { formatDate, formatMoney } from '../../lib/format';
 import type { Item } from '../../lib/types';
 
-export default async function AdminDashboard() {
-  const supabase = supabaseAdmin();
-  const [{ data: items }, { count: buyerCount }, { count: orderCount }] = await Promise.all([
-    supabase.from('items').select('*').order('created_at', { ascending: false }).limit(20),
-    supabase.from('buyers').select('*', { count: 'exact', head: true }).eq('status', 'active'),
-    supabase.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'paid')
-  ]);
+const REQUIRED_ENV = [
+  'NEXT_PUBLIC_SUPABASE_URL',
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'SUPABASE_STORAGE_BUCKET'
+];
 
-  const rows = (items || []) as Item[];
+function SetupCard({ title, lines }: { title: string; lines: string[] }) {
+  return (
+    <>
+      <section className="hero">
+        <div className="kicker">Setup check</div>
+        <h1>Admin login works.</h1>
+        <p>The control room loaded, but the database connection still needs one small fix.</p>
+      </section>
+      <section className="card">
+        <h2>{title}</h2>
+        <ul>
+          {lines.map((line) => <li key={line}><code>{line}</code></li>)}
+        </ul>
+        <p>Fix the item above in Vercel, then redeploy with build cache off.</p>
+      </section>
+    </>
+  );
+}
+
+export default async function AdminDashboard() {
+  const missing = REQUIRED_ENV.filter((name) => !process.env[name]);
+
+  if (missing.length) {
+    return <SetupCard title="Missing Vercel environment variables" lines={missing} />;
+  }
+
+  let rows: Item[] = [];
+  let buyerCount = 0;
+  let orderCount = 0;
+  let setupError = '';
+
+  try {
+    const supabase = supabaseAdmin();
+    const [itemsResult, buyersResult, ordersResult] = await Promise.all([
+      supabase.from('items').select('*').order('created_at', { ascending: false }).limit(20),
+      supabase.from('buyers').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+      supabase.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'paid')
+    ]);
+
+    if (itemsResult.error) setupError = itemsResult.error.message;
+    if (buyersResult.error) setupError = buyersResult.error.message;
+    if (ordersResult.error) setupError = ordersResult.error.message;
+
+    rows = (itemsResult.data || []) as Item[];
+    buyerCount = buyersResult.count || 0;
+    orderCount = ordersResult.count || 0;
+  } catch (error) {
+    setupError = error instanceof Error ? error.message : 'Unknown Supabase setup error';
+  }
+
+  if (setupError) {
+    return <SetupCard title="Supabase connection error" lines={[setupError]} />;
+  }
+
   const liveCount = rows.filter((item) => item.status === 'live').length;
   const soldCount = rows.filter((item) => item.status === 'sold').length;
 
@@ -25,7 +76,7 @@ export default async function AdminDashboard() {
 
       <section className="grid" style={{ marginBottom: 18 }}>
         <div className="card span-4"><div className="stat">{liveCount}</div><p>Live assets in active circulation</p></div>
-        <div className="card span-4"><div className="stat">{buyerCount || 0}</div><p>Approved active buyers</p></div>
+        <div className="card span-4"><div className="stat">{buyerCount}</div><p>Approved active buyers</p></div>
         <div className="card span-4"><div className="stat">{orderCount || soldCount}</div><p>Paid / sold orders</p></div>
       </section>
 
