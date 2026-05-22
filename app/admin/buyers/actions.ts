@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { supabaseAdmin } from '../../../lib/supabaseAdmin';
 import { parseTags } from '../../../lib/format';
+import { setAdminCookie } from '../../../lib/auth';
 import { PROSPECT_BUYERS } from './prospectBuyers';
 
 function text(formData: FormData, key: string) {
@@ -34,6 +35,7 @@ export async function addBuyerAction(formData: FormData) {
   }, { onConflict: 'email' });
 
   if (error) throw new Error(error.message);
+  await setAdminCookie();
   revalidatePath('/admin/buyers');
   redirect('/admin/buyers?added=1');
 }
@@ -57,6 +59,7 @@ export async function preloadProspectBuyersAction() {
     throw new Error(`${error.message}. If this mentions buyer status, run supabase/add-prospect-status.sql in Supabase SQL Editor once, then click preload again.`);
   }
 
+  await setAdminCookie();
   revalidatePath('/admin/buyers');
   redirect('/admin/buyers?preloaded=1');
 }
