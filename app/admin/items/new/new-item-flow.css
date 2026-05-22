@@ -1,0 +1,118 @@
+/* Premium asset intake flow overrides.
+   This file sits after globals.css for the New Asset page only. */
+
+.new-asset-page {
+  padding-bottom: 56px;
+}
+
+.new-asset-page .hero-premium {
+  padding-bottom: 46px;
+}
+
+.new-asset-form {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.new-asset-form > .span-4,
+.new-asset-form > .span-5,
+.new-asset-form > .span-6,
+.new-asset-form > .span-7,
+.new-asset-form > .span-8,
+.new-asset-form > .span-12 {
+  grid-column: 1 / -1;
+}
+
+.new-asset-form > .section-card {
+  max-width: 1060px;
+  width: 100%;
+  margin: 0 auto;
+  scroll-margin-top: 132px;
+}
+
+.new-asset-form > .section-card:nth-of-type(even) {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.new-asset-form > .section-card:nth-of-type(odd) {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.new-asset-form > .section-card--sticky {
+  position: relative !important;
+  top: auto !important;
+  align-self: auto !important;
+}
+
+.section-card {
+  transform: translateZ(0);
+}
+
+.section-card + .section-card {
+  margin-top: 4px;
+}
+
+.section-stephead {
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(22, 32, 24, 0.08);
+}
+
+.section-stephead h2 {
+  max-width: 720px;
+}
+
+.section-intro {
+  max-width: 760px;
+}
+
+.tag-panel,
+.upload-dropzone,
+.submit-bar {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.58),
+    0 16px 34px rgba(0, 0, 0, 0.06);
+}
+
+.upload-dropzone {
+  min-height: 150px;
+}
+
+.upload-dropzone .button {
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.journey-strip {
+  align-items: stretch;
+}
+
+.journey-chip {
+  min-height: 118px;
+}
+
+@media (min-width: 980px) {
+  .new-asset-form > .section-card:nth-of-type(1),
+  .new-asset-form > .section-card:nth-of-type(3),
+  .new-asset-form > .section-card:nth-of-type(5) {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .new-asset-form > .section-card:nth-of-type(2),
+  .new-asset-form > .section-card:nth-of-type(4) {
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 980px) {
+  .new-asset-form > .section-card {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
