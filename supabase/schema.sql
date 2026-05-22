@@ -47,7 +47,7 @@ create table if not exists public.buyers (
   postcode text,
   buyer_type text,
   tags text[] not null default '{}',
-  status text not null default 'active' check (status in ('active', 'paused', 'blocked')),
+  status text not null default 'prospect' check (status in ('prospect', 'active', 'paused', 'blocked')),
   notes text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
