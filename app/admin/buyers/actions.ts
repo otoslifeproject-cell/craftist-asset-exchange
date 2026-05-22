@@ -4,10 +4,16 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { supabaseAdmin } from '../../../lib/supabaseAdmin';
 import { parseTags } from '../../../lib/format';
+import { PROSPECT_BUYERS } from './prospectBuyers';
 
 function text(formData: FormData, key: string) {
   const value = String(formData.get(key) || '').trim();
   return value || null;
+}
+
+function safeStatus(value: FormDataEntryValue | null) {
+  const status = String(value || 'prospect');
+  return ['prospect', 'active', 'paused', 'blocked'].includes(status) ? status : 'prospect';
 }
 
 export async function addBuyerAction(formData: FormData) {
@@ -23,11 +29,34 @@ export async function addBuyerAction(formData: FormData) {
     postcode: text(formData, 'postcode'),
     buyer_type: text(formData, 'buyer_type'),
     tags: parseTags(formData.get('tags')),
-    status: String(formData.get('status') || 'active'),
+    status: safeStatus(formData.get('status')),
     notes: text(formData, 'notes')
   }, { onConflict: 'email' });
 
   if (error) throw new Error(error.message);
   revalidatePath('/admin/buyers');
   redirect('/admin/buyers?added=1');
+}
+
+export async function preloadProspectBuyersAction() {
+  const rows = PROSPECT_BUYERS.map((buyer) => ({
+    company_name: buyer.company_name,
+    contact_name: buyer.contact_name || null,
+    email: buyer.email.toLowerCase(),
+    phone: buyer.phone || null,
+    postcode: buyer.postcode || null,
+    buyer_type: buyer.buyer_type,
+    tags: buyer.tags,
+    status: 'prospect',
+    notes: buyer.notes
+  }));
+
+  const { error } = await supabaseAdmin().from('buyers').upsert(rows, { onConflict: 'email' });
+
+  if (error) {
+    throw new Error(`${error.message}. If this mentions buyer status, run supabase/add-prospect-status.sql in Supabase SQL Editor once, then click preload again.`);
+  }
+
+  revalidatePath('/admin/buyers');
+  redirect('/admin/buyers?preloaded=1');
 }
