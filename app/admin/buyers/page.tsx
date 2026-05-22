@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { supabaseAdmin } from '../../../lib/supabaseAdmin';
 import type { Buyer } from '../../../lib/types';
-import { addBuyerAction } from './actions';
+import { addBuyerAction, preloadProspectBuyersAction } from './actions';
 import './buyers.css';
 
 const PREVIEW_BUYERS: Buyer[] = [
@@ -14,7 +14,7 @@ const PREVIEW_BUYERS: Buyer[] = [
     postcode: 'N1',
     buyer_type: 'Prop hire / scenic reseller',
     tags: ['PROP-BIG', 'SCENIC', 'BAR'],
-    status: 'active',
+    status: 'prospect',
     notes: 'Preview row only — shows how tagged buyers will sit once the pool grows.',
     created_at: new Date().toISOString()
   },
@@ -27,7 +27,7 @@ const PREVIEW_BUYERS: Buyer[] = [
     postcode: 'M3',
     buyer_type: 'Festival / event operator',
     tags: ['FESTIVAL', 'OUTDOOR', 'DJ-BOOTH'],
-    status: 'active',
+    status: 'prospect',
     notes: 'Preview row only — useful for checking spacing, pills and hierarchy.',
     created_at: new Date().toISOString()
   },
@@ -40,7 +40,7 @@ const PREVIEW_BUYERS: Buyer[] = [
     postcode: 'SE1',
     buyer_type: 'Retail / immersive install',
     tags: ['IMMERSIVE', 'RETAIL', 'PHOTO-MOMENT'],
-    status: 'active',
+    status: 'prospect',
     notes: 'Preview row only — remove naturally as real buyers are added.',
     created_at: new Date().toISOString()
   }
@@ -50,7 +50,7 @@ function tagLabel(tag: string) {
   return tag.replace(/-/g, ' ');
 }
 
-export default async function BuyersPage({ searchParams }: { searchParams: Promise<{ added?: string }> }) {
+export default async function BuyersPage({ searchParams }: { searchParams: Promise<{ added?: string; preloaded?: string }> }) {
   const [{ data }, sp] = await Promise.all([
     supabaseAdmin().from('buyers').select('*').order('company_name'),
     searchParams
@@ -58,6 +58,8 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
 
   const buyers = (data || []) as Buyer[];
   const previewRows = buyers.length < 4 ? PREVIEW_BUYERS.slice(0, 4 - buyers.length) : [];
+  const activeCount = buyers.filter((buyer) => buyer.status === 'active').length;
+  const prospectCount = buyers.filter((buyer) => buyer.status === 'prospect').length;
   const universalCount = buyers.filter((buyer) => (buyer.tags || []).includes('ALL')).length;
 
   return (
@@ -68,10 +70,11 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
             <div className="kicker">Approved buyers</div>
             <h1>Segment before you send.</h1>
             <p>
-              Every buyer has tags. Assets only alert matching buyers, keeping the system premium rather than spammy.
-              Build the right buyer shape first, then let every asset flow into it.
+              Every buyer starts as a prospect. Verify the contact, then promote the buyer to active before real alerts go out.
+              Assets only alert matching buyers, keeping the system premium rather than spammy.
             </p>
             {sp.added ? <div className="notice">Buyer saved. The list and matching pool have been refreshed.</div> : null}
+            {sp.preloaded ? <div className="notice">Prospect buyer preload complete. These records are marked as prospects until verified.</div> : null}
           </div>
 
           <div className="card glass buyer-snapshot">
@@ -81,7 +84,7 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
               <ul className="subtle-list">
                 <li>
                   <strong>{buyers.length} buyers saved</strong>
-                  <span>Every company added here becomes part of the routing system.</span>
+                  <span>{prospectCount} prospects · {activeCount} active buyers.</span>
                 </li>
                 <li>
                   <strong>{universalCount} universal buyer{universalCount === 1 ? '' : 's'}</strong>
@@ -95,6 +98,19 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="card buyer-preload-card">
+        <div>
+          <div className="kicker">Prospect preload</div>
+          <h2 className="section-title">Load the first buyer universe.</h2>
+          <p className="buyer-section-copy">
+            This inserts the initial identified buyer companies as prospect records. The emails are safe internal placeholder addresses until real contacts are verified.
+          </p>
+        </div>
+        <form action={preloadProspectBuyersAction}>
+          <button className="button green" type="submit">Preload prospect buyers</button>
+        </form>
       </section>
 
       <section className="grid buyer-room">
@@ -118,7 +134,15 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
               <input name="tags" placeholder="PROP-BIG, FESTIVAL, IMMERSIVE" />
               <span className="help">Use ALL only for a buyer who should see every opportunity.</span>
             </label>
-            <input type="hidden" name="status" value="active" />
+            <label>
+              Status
+              <select name="status" defaultValue="prospect">
+                <option value="prospect">Prospect</option>
+                <option value="active">Active</option>
+                <option value="paused">Paused</option>
+                <option value="blocked">Blocked</option>
+              </select>
+            </label>
             <label>Notes<textarea name="notes" placeholder="What they buy, locations, budget notes, speed, special interests..." /></label>
             <button className="button green" type="submit">Save buyer</button>
           </form>
@@ -131,7 +155,7 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
               <h2 className="section-title">Buyer list</h2>
               <p className="buyer-section-copy">Click any live buyer to open their record. Preview rows show how the room will look as the list grows.</p>
             </div>
-            <div className="buyer-count-pill">{buyers.length} live</div>
+            <div className="buyer-count-pill">{prospectCount} prospects · {activeCount} active</div>
           </div>
 
           <div className="buyer-table-shell">
@@ -141,6 +165,7 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
                   <th>Company</th>
                   <th>Email</th>
                   <th>Type</th>
+                  <th>Status</th>
                   <th>Tags</th>
                 </tr>
               </thead>
@@ -157,6 +182,7 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
                       <Link className="buyer-email-link" href={`/admin/buyers/${buyer.id}`}>{buyer.email}</Link>
                     </td>
                     <td><span className="buyer-type-text">{buyer.buyer_type || 'Not categorised yet'}</span></td>
+                    <td><span className={`buyer-status buyer-status-${buyer.status}`}>{buyer.status}</span></td>
                     <td>
                       <div className="buyer-tag-cluster">
                         {(buyer.tags || []).length ? (buyer.tags || []).map((tag) => <span className="pill subtle buyer-pill" key={tag}>{tagLabel(tag)}</span>) : <span className="buyer-muted">No tags yet</span>}
@@ -175,6 +201,7 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
                     </td>
                     <td><span className="buyer-muted">{buyer.email}</span></td>
                     <td><span className="buyer-type-text">{buyer.buyer_type}</span></td>
+                    <td><span className="buyer-status buyer-status-prospect">prospect</span></td>
                     <td>
                       <div className="buyer-tag-cluster">
                         {(buyer.tags || []).map((tag) => <span className="pill subtle buyer-pill buyer-pill-preview" key={tag}>{tagLabel(tag)}</span>)}
@@ -183,7 +210,7 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
                   </tr>
                 ))}
 
-                {!buyers.length && !previewRows.length ? <tr><td colSpan={4}>No buyers yet.</td></tr> : null}
+                {!buyers.length && !previewRows.length ? <tr><td colSpan={5}>No buyers yet.</td></tr> : null}
               </tbody>
             </table>
           </div>
