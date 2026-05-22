@@ -4,17 +4,27 @@ import { redirect } from 'next/navigation';
 
 const COOKIE_NAME = 'craftist_exchange_admin';
 
-function getSecret() {
-  return process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_PASSCODE || 'dev-secret-change-me';
+function secrets() {
+  return Array.from(new Set([
+    process.env.ADMIN_SESSION_SECRET,
+    process.env.ADMIN_PASSCODE,
+    'dev-secret-change-me'
+  ].filter(Boolean) as string[]));
 }
 
-function signature() {
-  return crypto.createHmac('sha256', getSecret()).update('admin-session-v1').digest('hex');
+function makeSignature(secret: string) {
+  return crypto.createHmac('sha256', secret).update('admin-session-v1').digest('hex');
+}
+
+function currentSignature() {
+  return makeSignature(secrets()[0] || 'dev-secret-change-me');
 }
 
 export async function isAdmin() {
   const jar = await cookies();
-  return jar.get(COOKIE_NAME)?.value === signature();
+  const value = jar.get(COOKIE_NAME)?.value;
+  if (!value) return false;
+  return secrets().some((secret) => value === makeSignature(secret));
 }
 
 export async function requireAdmin() {
@@ -23,7 +33,7 @@ export async function requireAdmin() {
 
 export async function setAdminCookie() {
   const jar = await cookies();
-  jar.set(COOKIE_NAME, signature(), {
+  jar.set(COOKIE_NAME, currentSignature(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
