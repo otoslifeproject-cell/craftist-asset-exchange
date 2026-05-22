@@ -21,11 +21,21 @@ export function toPence(value: FormDataEntryValue | null) {
   return Math.round(Number(raw) * 100);
 }
 
+export function normaliseTag(value: string) {
+  return String(value || '')
+    .trim()
+    .toUpperCase()
+    .replace(/&/g, ' AND ')
+    .replace(/[^A-Z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 42);
+}
+
 export function parseTags(input: FormDataEntryValue | null | undefined) {
-  return String(input || '')
-    .split(',')
-    .map((tag) => tag.trim().toUpperCase())
-    .filter(Boolean);
+  return Array.from(new Set(String(input || '')
+    .split(/[\n,;]+|\s+\/\s+/g)
+    .map(normaliseTag)
+    .filter(Boolean)));
 }
 
 export function tagsToText(tags: string[] | null | undefined) {
