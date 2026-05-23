@@ -33,10 +33,10 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
       <div className="room-hero clean-hero">
         <div>
           <div className="kicker">Buyers</div>
-          <h1>Buyer room.</h1>
+          <h1 className="room-title">Buyers</h1>
           <p>Add a buyer or open a record. Prospects stay separate until you set them to Active.</p>
           {sp.added ? <div className="notice compact-notice">Buyer saved.</div> : null}
-          {!seedResult.ok ? <div className="notice compact-notice">Buyer contact fields need the Supabase migration.</div> : null}
+          {!seedResult.ok ? <div className="notice compact-notice">Supabase setup needed.</div> : null}
         </div>
         <div className="room-stat-card compact-stat"><strong>{buyers.length}</strong><span>{prospectCount} prospects · {activeCount} active</span></div>
       </div>
