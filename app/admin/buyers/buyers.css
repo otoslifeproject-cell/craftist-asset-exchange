@@ -1,7 +1,3 @@
-.buyer-room {
-  align-items: start;
-}
-
 .buyer-section-copy {
   margin: 8px 0 0;
   max-width: 560px;
@@ -10,7 +6,8 @@
 .buyer-form-card,
 .buyer-list-card,
 .buyer-snapshot,
-.buyer-preload-card {
+.buyer-preload-card,
+.buyer-profile-card {
   overflow: hidden;
 }
 
@@ -18,55 +15,6 @@
 .buyer-form textarea,
 .buyer-form select {
   font-size: 16px;
-}
-
-.buyer-preload-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 18px;
-  position: relative;
-}
-
-.buyer-preload-card::after {
-  content: "";
-  position: absolute;
-  right: -58px;
-  bottom: -70px;
-  width: 190px;
-  height: 190px;
-  border-radius: 999px;
-  background: radial-gradient(circle at 38% 34%, rgba(177, 37, 55, .14), transparent 42%), radial-gradient(circle at 62% 58%, rgba(23, 74, 50, .10), transparent 40%);
-  filter: blur(8px);
-  pointer-events: none;
-}
-
-.buyer-preload-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-.buyer-list-card {
-  position: relative;
-}
-
-.buyer-list-card::after {
-  content: "";
-  position: absolute;
-  right: -72px;
-  top: -84px;
-  width: 210px;
-  height: 210px;
-  border-radius: 999px;
-  background: radial-gradient(circle at 38% 34%, rgba(177, 37, 55, .16), transparent 42%), radial-gradient(circle at 62% 58%, rgba(23, 74, 50, .10), transparent 40%);
-  filter: blur(8px);
-  pointer-events: none;
-}
-
-.buyer-list-head {
-  position: relative;
-  z-index: 1;
 }
 
 .buyer-count-pill {
@@ -86,102 +34,6 @@
   white-space: nowrap;
 }
 
-.buyer-table-shell {
-  position: relative;
-  z-index: 1;
-  border-radius: 22px;
-  overflow: hidden;
-  border: 1px solid rgba(22, 32, 24, .08);
-  background: rgba(255, 255, 255, .28);
-}
-
-.buyer-table th {
-  padding: 16px 14px;
-  background: rgba(255, 255, 255, .22);
-  color: rgba(22, 32, 24, .64);
-}
-
-.buyer-table td {
-  padding: 16px 14px;
-}
-
-.buyer-row {
-  transition: background .16s ease, transform .16s ease;
-}
-
-.buyer-row-live:hover {
-  background: rgba(23, 74, 50, .045);
-}
-
-.buyer-row-preview {
-  opacity: .68;
-  background: rgba(255, 255, 255, .18);
-}
-
-.buyer-company-link {
-  display: grid;
-  gap: 4px;
-  color: var(--ink);
-}
-
-.buyer-company-link strong {
-  display: block;
-  font-size: 16px;
-  line-height: 1.12;
-  letter-spacing: -.02em;
-  color: var(--ink);
-}
-
-.buyer-company-link small {
-  display: block;
-  color: var(--muted);
-  font-weight: 650;
-}
-
-.buyer-company-link:hover strong,
-.buyer-email-link:hover {
-  color: var(--green);
-}
-
-.buyer-company-link-preview {
-  pointer-events: none;
-}
-
-.buyer-email-link {
-  color: var(--ink);
-  font-weight: 680;
-}
-
-.buyer-type-text {
-  color: rgba(22, 32, 24, .78);
-  font-weight: 680;
-}
-
-.buyer-muted {
-  color: var(--muted);
-  font-weight: 650;
-}
-
-.buyer-tag-cluster {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.buyer-pill {
-  margin: 0;
-  background: rgba(23, 74, 50, .08);
-  color: var(--green);
-  border-color: rgba(23, 74, 50, .10);
-  letter-spacing: .02em;
-}
-
-.buyer-pill-preview {
-  background: rgba(22, 32, 24, .055);
-  color: rgba(22, 32, 24, .68);
-  border-color: rgba(22, 32, 24, .06);
-}
-
 .buyer-status {
   display: inline-flex;
   align-items: center;
@@ -196,6 +48,7 @@
   border: 1px solid rgba(22, 32, 24, .08);
   background: rgba(22, 32, 24, .05);
   color: rgba(22, 32, 24, .68);
+  white-space: nowrap;
 }
 
 .buyer-status-prospect {
@@ -222,13 +75,99 @@
   color: var(--danger);
 }
 
-@media (max-width: 900px) {
-  .buyer-preload-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.buyer-room-row {
+  min-height: 0;
+}
 
+.buyer-room-row small,
+.buyer-link-line,
+.profile-field strong,
+.buyer-notes-panel p {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.buyer-link-line {
+  color: rgba(22, 32, 24, .58);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.buyer-pill {
+  margin: 0;
+  background: rgba(23, 74, 50, .08);
+  color: var(--green);
+  border-color: rgba(23, 74, 50, .10);
+  letter-spacing: .02em;
+}
+
+.buyer-muted {
+  color: var(--muted);
+  font-weight: 650;
+}
+
+.buyer-status-tile {
+  align-content: center;
+  justify-items: start;
+}
+
+.buyer-status-tile strong {
+  margin-top: 6px;
+}
+
+.buyer-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.profile-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .36);
+  border: 1px solid rgba(22, 32, 24, .08);
+}
+
+.profile-field span,
+.buyer-tag-panel .kicker,
+.buyer-notes-panel .kicker {
+  color: rgba(22, 32, 24, .55);
+}
+
+.profile-field strong {
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.28;
+}
+
+.buyer-tag-panel,
+.buyer-notes-panel {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(22, 32, 24, .09);
+}
+
+.buyer-record-tags {
+  margin-top: 10px;
+}
+
+.buyer-notes-panel p {
+  margin: 8px 0 0;
+  color: rgba(22, 32, 24, .72);
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+@media (max-width: 900px) {
   .buyer-count-pill {
     align-self: flex-start;
+  }
+
+  .buyer-profile-grid {
+    grid-template-columns: 1fr;
   }
 }
