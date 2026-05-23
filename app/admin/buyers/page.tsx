@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { supabaseAdmin } from '../../../lib/supabaseAdmin';
 import type { Buyer } from '../../../lib/types';
-import { addBuyerAction, preloadProspectBuyersAction } from './actions';
+import { addBuyerAction, preloadProspectBuyersAction, refreshProspectContactDataAction } from './actions';
 import '../room.css';
 import './buyers.css';
 
@@ -20,7 +20,7 @@ function contactLine(buyer: Buyer) {
   return bits.join(' · ');
 }
 
-export default async function BuyersPage({ searchParams }: { searchParams: Promise<{ added?: string; preloaded?: string }> }) {
+export default async function BuyersPage({ searchParams }: { searchParams: Promise<{ added?: string; preloaded?: string; refreshed?: string }> }) {
   const [{ data }, sp] = await Promise.all([
     supabaseAdmin().from('buyers').select('*').order('company_name'),
     searchParams
@@ -42,6 +42,7 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
           <p>One clean buyer room: add or preload prospects on the left, then open any buyer record from the list on the right.</p>
           {sp.added ? <div className="notice">Buyer saved. The matching pool has been refreshed.</div> : null}
           {sp.preloaded ? <div className="notice">Prospect buyer preload complete. The preload control is now hidden because buyer records exist.</div> : null}
+          {sp.refreshed ? <div className="notice">Prospect contact research refreshed. Records remain prospects until you promote them manually.</div> : null}
         </div>
         <div className="room-stat-card">
           <strong>{buyers.length}</strong>
@@ -75,12 +76,13 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
               <button className="button green" type="submit">Preload prospects</button>
             </form>
           ) : (
-            <div className="preload-inline preload-inline-done">
+            <form action={refreshProspectContactDataAction} className="preload-inline preload-inline-done">
               <div>
                 <strong>Prospect preload is complete</strong>
-                <small>The one-time preload button is hidden now. New buyers can be added manually below.</small>
+                <small>Refresh contact research when the seed file is updated. This keeps every record as prospect.</small>
               </div>
-            </div>
+              <button className="button ghost" type="submit">Refresh contact research</button>
+            </form>
           )}
 
           <form action={addBuyerAction} className="form room-form buyer-form">
