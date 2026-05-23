@@ -43,7 +43,7 @@ export type Buyer = {
   id: string;
   company_name: string;
   contact_name: string | null;
-  email: string | null;
+  email: string;
   phone: string | null;
   website: string | null;
   country: string | null;
