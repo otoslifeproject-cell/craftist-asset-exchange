@@ -31,6 +31,7 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
   const activeCount = buyers.filter((buyer) => buyer.status === 'active').length;
   const prospectCount = buyers.filter((buyer) => buyer.status === 'prospect').length;
   const universalCount = buyers.filter((buyer) => (buyer.tags || []).includes('ALL')).length;
+  const shouldShowPreload = buyers.length === 0;
 
   return (
     <section className="room-page buyers-room-page">
@@ -40,7 +41,7 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
           <h1>Segment before you send.</h1>
           <p>One clean buyer room: add or preload prospects on the left, then open any buyer record from the list on the right.</p>
           {sp.added ? <div className="notice">Buyer saved. The matching pool has been refreshed.</div> : null}
-          {sp.preloaded ? <div className="notice">Prospect buyer preload complete. These records are marked as prospects until verified.</div> : null}
+          {sp.preloaded ? <div className="notice">Prospect buyer preload complete. The preload control is now hidden because buyer records exist.</div> : null}
         </div>
         <div className="room-stat-card">
           <strong>{buyers.length}</strong>
@@ -65,13 +66,22 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
             </div>
           </div>
 
-          <form action={preloadProspectBuyersAction} className="preload-inline">
-            <div>
-              <strong>Initial prospect universe</strong>
-              <small>Loads identified buyer companies with contact/source fields where verified.</small>
+          {shouldShowPreload ? (
+            <form action={preloadProspectBuyersAction} className="preload-inline">
+              <div>
+                <strong>Initial prospect universe</strong>
+                <small>Loads identified buyer companies with contact/source fields where verified.</small>
+              </div>
+              <button className="button green" type="submit">Preload prospects</button>
+            </form>
+          ) : (
+            <div className="preload-inline preload-inline-done">
+              <div>
+                <strong>Prospect preload is complete</strong>
+                <small>The one-time preload button is hidden now. New buyers can be added manually below.</small>
+              </div>
             </div>
-            <button className="button green" type="submit">Preload prospects</button>
-          </form>
+          )}
 
           <form action={addBuyerAction} className="form room-form buyer-form">
             <label>Company<input name="company_name" required placeholder="Company / studio / operator" /></label>
