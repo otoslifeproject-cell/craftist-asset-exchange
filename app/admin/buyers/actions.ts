@@ -27,6 +27,9 @@ export async function addBuyerAction(formData: FormData) {
     contact_name: text(formData, 'contact_name'),
     email: email.toLowerCase(),
     phone: text(formData, 'phone'),
+    website: text(formData, 'website'),
+    country: text(formData, 'country'),
+    source_url: text(formData, 'source_url'),
     postcode: text(formData, 'postcode'),
     buyer_type: text(formData, 'buyer_type'),
     tags: parseTags(formData.get('tags')),
@@ -46,6 +49,9 @@ export async function preloadProspectBuyersAction() {
     contact_name: buyer.contact_name || null,
     email: buyer.email.toLowerCase(),
     phone: buyer.phone || null,
+    website: buyer.website || null,
+    country: buyer.country || null,
+    source_url: buyer.source_url || buyer.website || null,
     postcode: buyer.postcode || null,
     buyer_type: buyer.buyer_type,
     tags: buyer.tags,
@@ -56,7 +62,7 @@ export async function preloadProspectBuyersAction() {
   const { error } = await supabaseAdmin().from('buyers').upsert(rows, { onConflict: 'email' });
 
   if (error) {
-    throw new Error(`${error.message}. If this mentions buyer status, run supabase/add-prospect-status.sql in Supabase SQL Editor once, then click preload again.`);
+    throw new Error(`${error.message}. If this mentions buyer status/contact fields, run supabase/add-prospect-status.sql and supabase/add-buyer-contact-fields.sql in Supabase SQL Editor once, then click preload again.`);
   }
 
   await setAdminCookie();
