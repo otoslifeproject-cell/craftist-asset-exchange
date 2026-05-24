@@ -30,6 +30,20 @@ function isGenericContact(value?: string | null) {
   return normalised.includes('contact team') || normalised.includes('to verify') || normalised.includes('prospect contact');
 }
 
+function canReplaceNotes(value?: string | null) {
+  if (!value) return true;
+  const normalised = value.toLowerCase();
+  return normalised.includes('verify') || normalised.includes('public contact') || normalised.includes('route added') || normalised.includes('route to verify') || normalised.includes('prospect.');
+}
+
+function canReplaceSource(existing?: string | null, incoming?: string | null, website?: string | null) {
+  if (!incoming) return false;
+  if (!existing) return true;
+  if (existing === incoming) return false;
+  if (website && existing === website && incoming !== website) return true;
+  return existing.endsWith('/') && incoming.startsWith(existing) && incoming !== existing;
+}
+
 function mergeTags(existing: string[] | null | undefined, incoming: string[]) {
   return Array.from(new Set([...(existing || []), ...incoming]));
 }
@@ -59,10 +73,10 @@ function patchForExisting(existing: Buyer, seed: SeedBuyer): BuyerPatch {
   if (isBlank(existing.phone) && seed.phone) patch.phone = seed.phone;
   if (isBlank(existing.website) && seed.website) patch.website = seed.website;
   if (isBlank(existing.country) && seed.country) patch.country = seed.country;
-  if (isBlank(existing.source_url) && (seed.source_url || seed.website)) patch.source_url = seed.source_url || seed.website || null;
+  if (canReplaceSource(existing.source_url, seed.source_url || seed.website || null, existing.website || seed.website || null)) patch.source_url = seed.source_url || seed.website || null;
   if (isBlank(existing.postcode) && seed.postcode) patch.postcode = seed.postcode;
   if (isBlank(existing.buyer_type) && seed.buyer_type) patch.buyer_type = seed.buyer_type;
-  if (isBlank(existing.notes) && seed.notes) patch.notes = seed.notes;
+  if (seed.notes && canReplaceNotes(existing.notes)) patch.notes = seed.notes;
 
   const tags = mergeTags(existing.tags, seed.tags);
   if (tags.join('|') !== (existing.tags || []).join('|')) patch.tags = tags;
