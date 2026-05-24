@@ -1,6 +1,9 @@
 import { supabaseAdmin } from '../../../lib/supabaseAdmin';
 import type { Buyer } from '../../../lib/types';
 import { PROSPECT_BUYERS } from './prospectBuyers';
+import { applyVerifiedContactOverride } from './verifiedContactOverrides';
+
+type SeedBuyer = ReturnType<typeof applyVerifiedContactOverride>;
 
 type SeedResult = {
   ok: boolean;
@@ -31,7 +34,7 @@ function mergeTags(existing: string[] | null | undefined, incoming: string[]) {
   return Array.from(new Set([...(existing || []), ...incoming]));
 }
 
-function seedRow(seed: (typeof PROSPECT_BUYERS)[number]) {
+function seedRow(seed: SeedBuyer) {
   return {
     company_name: seed.company_name,
     contact_name: seed.contact_name || null,
@@ -48,7 +51,7 @@ function seedRow(seed: (typeof PROSPECT_BUYERS)[number]) {
   };
 }
 
-function patchForExisting(existing: Buyer, seed: (typeof PROSPECT_BUYERS)[number]): BuyerPatch {
+function patchForExisting(existing: Buyer, seed: SeedBuyer): BuyerPatch {
   const patch: BuyerPatch = {};
 
   if (isGenericContact(existing.contact_name) && seed.contact_name && !isGenericContact(seed.contact_name)) patch.contact_name = seed.contact_name;
@@ -84,7 +87,8 @@ export async function ensureProspectBuyersSeeded(): Promise<SeedResult> {
     let inserted = 0;
     let updated = 0;
 
-    for (const seed of PROSPECT_BUYERS) {
+    for (const rawSeed of PROSPECT_BUYERS) {
+      const seed = applyVerifiedContactOverride(rawSeed);
       const email = seed.email.toLowerCase();
       const matched = byEmail.get(email) || byCompany.get(seed.company_name.toLowerCase());
 
