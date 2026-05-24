@@ -112,6 +112,17 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     notes: 'Official website lists info@stageco.com, +32 16 60 84 71 and Kapelleweg 6, 3150 Tildonk, Belgium.'
   },
   {
+    company_name: 'P&P Projects',
+    contact_name: 'P&P Projects team',
+    email: 'info@ppprojects.com',
+    phone: '+31 493 694 511',
+    website: 'https://www.ppprojects.com/',
+    country: 'Netherlands / EU',
+    source_url: 'https://www.ppprojects.com/contact/',
+    postcode: 'Someren, Netherlands',
+    notes: 'Official site contact route lists info@ppprojects.com and +31 493 694 511. Strong EU fit for themed entertainment, scenery, props and attraction assets.'
+  },
+  {
     company_name: 'ECA2',
     contact_name: 'ECA2 Paris team',
     email: 'paris@eca2.com',
@@ -121,6 +132,76 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     source_url: 'https://www.eca2.com/contact/',
     postcode: 'Levallois-Perret, France',
     notes: 'Official contact page lists ECA2 Paris, paris@eca2.com, (+33) 1 83 75 80 80 and 101-109 Rue Jean Jaurès, 92300 Levallois-Perret, France.'
+  },
+  {
+    company_name: 'SFL Group',
+    contact_name: 'd&b solutions contact team',
+    phone: '+44 (0)20 8254 4800',
+    website: 'https://dbsolutions.com/',
+    country: 'UK',
+    source_url: 'https://dbsolutions.com/contact-us/',
+    postcode: 'London SW19 3WL',
+    buyer_type: 'Immersive AV / event production / integrated experiences',
+    notes: 'SFL route now sits within d&b solutions. Official contact route lists +44 (0)20 8254 4800 and Wimbledon address. Email is protected on the public page, so not copied.'
+  },
+  {
+    company_name: 'Unibox',
+    contact_name: 'Unibox enquiries team',
+    email: 'sales@unibox.co.uk',
+    phone: '+44 (0)161 655 2100',
+    website: 'https://www.unibox.co.uk/',
+    country: 'UK',
+    source_url: 'https://www.unibox.co.uk/contact/',
+    postcode: 'Manchester, UK',
+    notes: 'Public commercial route captured for sales enquiries. Keep as prospect until outreach is approved.'
+  },
+  {
+    company_name: 'Octink',
+    contact_name: 'Octink team',
+    email: 'hello@octink.com',
+    phone: '+44 (0)20 8232 6868',
+    website: 'https://www.octink.com/',
+    country: 'UK',
+    source_url: 'https://www.octink.com/contact/',
+    postcode: 'Brentford / West London, UK',
+    notes: 'Public contact route captured for display, interiors and exhibition enquiries. Keep as prospect until outreach is approved.'
+  },
+  {
+    company_name: 'Katapult',
+    contact_name: 'Katapult team',
+    email: 'hello@katapult.co.uk',
+    website: 'https://www.katapult.co.uk/',
+    country: 'UK',
+    source_url: 'https://www.katapult.co.uk/contact/',
+    postcode: 'Derby, UK',
+    notes: 'Public contact route captured for themed attraction and experience design enquiries. Phone not copied until verified.'
+  },
+  {
+    company_name: 'NUSSLI',
+    contact_name: 'NUSSLI contact team',
+    website: 'https://www.nussli.com/en/',
+    country: 'Switzerland / EU route',
+    source_url: 'https://www.nussli.com/en/contact/',
+    postcode: 'Hüttwilen, Switzerland',
+    notes: 'Official English contact route captured. Use contact page until a direct public email/phone is verified.'
+  },
+  {
+    company_name: 'Jora Vision',
+    contact_name: 'Jora Vision contact team',
+    website: 'https://www.joravision.com/',
+    country: 'Netherlands / EU',
+    source_url: 'https://www.joravision.com/contact/',
+    postcode: 'Netherlands',
+    notes: 'Official English contact route captured for attraction design, scenic production and themed entertainment enquiries. Direct email/phone not copied until verified.'
+  },
+  {
+    company_name: 'Kraftwerk Living Technologies',
+    contact_name: 'Kraftwerk Living Technologies team',
+    website: 'https://www.kraftwerk.at/',
+    country: 'Austria / EU',
+    source_url: 'https://www.kraftwerk.at/contact/',
+    postcode: 'Wels / Austria',
+    notes: 'Official contact route captured for integrated media technology, immersive AV and attraction systems. Direct email/phone not copied until verified.'
   }
 ];
 
