@@ -1,6 +1,9 @@
 export type ItemStatus = 'draft' | 'live' | 'reserved' | 'sold' | 'expired';
 export type BuyerStatus = 'prospect' | 'active' | 'paused' | 'blocked';
-export type RecipientStatus = 'queued' | 'sent' | 'opened' | 'checkout_started' | 'paid' | 'expired' | 'failed';
+export type RecipientStatus = 'queued' | 'sent' | 'opened' | 'checkout_started' | 'paid' | 'expired' | 'failed' | 'suppressed';
+export type ReservationStatus = 'none' | 'deposit_pending' | 'deposit_paid' | 'balance_pending' | 'paid_full' | 'expired' | 'released';
+export type OrderStatus = 'checkout_started' | 'deposit_pending' | 'deposit_paid' | 'balance_pending' | 'paid' | 'expired' | 'refunded' | 'cancelled';
+export type PaymentMode = 'deposit' | 'full' | 'balance';
 
 export type AssetFile = {
   name: string;
@@ -24,6 +27,7 @@ export type Item = {
   decision_deadline: string | null;
   guide_price_pence: number;
   transport_price_pence: number;
+  reservation_deposit_pence: number;
   currency: string;
   image_urls: string[] | null;
   files: AssetFile[] | null;
@@ -35,6 +39,7 @@ export type Item = {
   assembly_notes: string | null;
   reserved_until: string | null;
   reserved_token: string | null;
+  reservation_status: ReservationStatus | null;
   sold_at: string | null;
   created_at: string;
 };
@@ -50,8 +55,15 @@ export type Buyer = {
   source_url: string | null;
   postcode: string | null;
   buyer_type: string | null;
+  preferred_categories: string[] | null;
+  preferred_tags: string[] | null;
   tags: string[] | null;
   status: BuyerStatus;
+  alert_consent_at: string | null;
+  terms_accepted_at: string | null;
+  terms_version: string | null;
+  buyer_portal_token: string | null;
+  last_alerted_at: string | null;
   notes: string | null;
   created_at: string;
 };
@@ -63,8 +75,37 @@ export type AlertRecipient = {
   buyer_id: string;
   token: string;
   status: RecipientStatus;
+  match_reason: string | null;
+  suppressed_at: string | null;
   sent_at: string | null;
   opened_at: string | null;
   checkout_started_at: string | null;
   paid_at: string | null;
+};
+
+export type Order = {
+  id: string;
+  item_id: string;
+  buyer_id: string;
+  alert_recipient_id: string | null;
+  stripe_session_id: string;
+  stripe_payment_intent_id: string | null;
+  stripe_customer_id: string | null;
+  status: OrderStatus;
+  payment_mode: PaymentMode;
+  amount_pence: number;
+  deposit_amount_pence: number;
+  balance_due_pence: number;
+  currency: string;
+  delivery_postcode_requested: string | null;
+  checkout_url: string | null;
+  shipping_details: unknown;
+  customer_details: unknown;
+  reserved_until: string | null;
+  deposit_paid_at: string | null;
+  balance_paid_at: string | null;
+  paid_at: string | null;
+  released_at: string | null;
+  release_reason: string | null;
+  created_at: string;
 };
