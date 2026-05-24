@@ -2,6 +2,7 @@ import type { Item } from './types';
 
 export type BuyerCategory = { id: string; label: string; tagHints: string[] };
 export type BuyerTag = { id: string; label: string };
+export type BuyerAlertCategory = { id: string; title: string; shortTitle: string; summary: string; tags: string[]; examples: string[] };
 
 export const BUYER_TERMS_VERSION = 'CRAFTIST-BUYER-TERMS-v0.2-2026-05-24';
 
@@ -27,6 +28,17 @@ export const BUYER_TAGS: BuyerTag[] = ['PROP-BIG','SCENIC','BAR','FESTIVAL','IMM
 export const BUYER_CATEGORY_IDS = BUYER_CATEGORIES.map((category) => category.id);
 export const BUYER_TAG_IDS = BUYER_TAGS.map((tag) => tag.id);
 
+export const BUYER_ALERT_CATEGORIES: BuyerAlertCategory[] = BUYER_CATEGORIES.map((category) => ({
+  id: category.id.toLowerCase(),
+  title: category.label,
+  shortTitle: category.label,
+  summary: 'Private alerts for matching ' + category.label.toLowerCase() + ' opportunities.',
+  tags: category.tagHints,
+  examples: category.tagHints
+}));
+
+export const BUYER_ALERT_TAGS = BUYER_TAG_IDS;
+
 export const PAYMENT_ROUTE_OPTIONS = [
   { value: 'deposit-and-balance', label: 'Reserve with deposit', copy: 'Secure the asset for seven days, then pay the balance before the reservation ends.' },
   { value: 'full-payment', label: 'Buy now in full', copy: 'Pay the full amount immediately and lock the asset as sold.' },
@@ -38,6 +50,8 @@ export const URGENCY_OPTIONS = [
   { value: 'daily', label: 'Daily digest when matches exist' },
   { value: 'priority', label: 'Priority opportunities only' }
 ];
+
+export const ALERT_FREQUENCY_OPTIONS = URGENCY_OPTIONS;
 
 export function normaliseChoice(value: string) {
   return String(value || '').trim().toUpperCase().replace(/&/g, ' AND ').replace(/[^A-Z0-9]+/g, '-').replace(/^-+|-+$/g, '');
