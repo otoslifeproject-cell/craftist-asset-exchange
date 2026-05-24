@@ -39,6 +39,24 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     notes: 'Official website lists 01937 222 777. Email not visible in captured public page; use website contact route until verified.'
   },
   {
+    company_name: 'The Prop Factory',
+    contact_name: 'The Prop Factory team',
+    website: 'https://www.thepropfactory.co.uk/',
+    country: 'UK',
+    source_url: 'https://www.thepropfactory.co.uk/pages/contact-us',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Stockyard Props',
+    contact_name: 'Stockyard North team',
+    website: 'https://stockyardnorth.com/',
+    country: 'UK',
+    source_url: 'https://stockyardnorth.com/pages/contact',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
+  },
+  {
     company_name: 'London Prop Hire',
     contact_name: 'London Prop Hire team',
     phone: '07772 777093',
@@ -47,6 +65,42 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     source_url: 'https://www.londonprophire.com/',
     postcode: 'London SW17 0BA',
     notes: 'Official site lists Unit 11, Wimbledon Stadium Business Centre, Riverside Road, London SW17 0BA and Tel: 07772 777093. Email not visible in captured public page.'
+  },
+  {
+    company_name: 'Farley Prop Hire',
+    contact_name: 'Farley Prop Hire team',
+    website: 'https://www.farleyprophire.com/',
+    country: 'UK',
+    source_url: 'https://www.farleyprophire.com/contact-us/',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'White Light',
+    contact_name: 'White Light team',
+    website: 'https://www.white-light.co.uk/',
+    country: 'UK',
+    source_url: 'https://www.white-light.co.uk/contact/',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'PRG UK',
+    contact_name: 'PRG UK team',
+    website: 'https://www.prg.com/uk/en',
+    country: 'UK',
+    source_url: 'https://www.prg.com/uk/en/contact',
+    postcode: 'UK',
+    notes: 'Contact route set to PRG UK official website/contact route. Direct email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Entec Live',
+    contact_name: 'Entec Live team',
+    website: 'https://enteclive.com/',
+    country: 'UK',
+    source_url: 'https://enteclive.com/contact/',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
   },
   {
     company_name: 'Stage Sound Services',
@@ -60,6 +114,17 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     notes: 'Official site lists hires@stagesoundservices.co.uk, sales@stagesoundservices.co.uk, +44 (0)29 2061 3577 and Unit A Avenue Park Industrial Estate, Pentwyn, Cardiff CF23 8HE.'
   },
   {
+    company_name: 'SFL Group',
+    contact_name: 'd&b solutions contact team',
+    phone: '+44 (0)20 8254 4800',
+    website: 'https://dbsolutions.com/',
+    country: 'UK',
+    source_url: 'https://dbsolutions.com/contact-us/',
+    postcode: 'London SW19 3WL',
+    buyer_type: 'Immersive AV / event production / integrated experiences',
+    notes: 'SFL route now sits within d&b solutions. Official contact route lists +44 (0)20 8254 4800 and Wimbledon address. Email is protected on the public page, so not copied.'
+  },
+  {
     company_name: 'Pearce Hire',
     contact_name: 'Pearce Hire team',
     phone: '01733 554950',
@@ -70,6 +135,15 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     notes: 'Official site lists 01733 554950 and Unit 8, Reynolds Industrial Park, Stevern Way, Peterborough PE1 5EL. Email is protected on the public page, so not copied.'
   },
   {
+    company_name: 'TSL Lighting',
+    contact_name: 'TSL Lighting team',
+    website: 'https://www.tsl.lighting/',
+    country: 'UK',
+    source_url: 'https://www.tsl.lighting/contact',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
+  },
+  {
     company_name: 'Production AV',
     contact_name: 'Production AV team',
     phone: '01242 650604',
@@ -78,6 +152,78 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     source_url: 'https://www.productionav.co.uk/contact-us/',
     postcode: 'Cheltenham GL51 9PT',
     notes: 'Official contact page lists 01242 650604, Unit F Ashville Trading Estate, The Runnings, Cheltenham GL51 9PT and an email link protected in page markup. Use phone/contact form unless email is manually verified.'
+  },
+  {
+    company_name: 'Secret Cinema',
+    contact_name: 'Secret Cinema team',
+    website: 'https://www.secretcinema.org/',
+    country: 'UK',
+    source_url: 'https://www.secretcinema.org/',
+    postcode: 'UK',
+    notes: 'Official site route captured. Direct commercial email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Punchdrunk',
+    contact_name: 'Punchdrunk team',
+    website: 'https://www.punchdrunk.com/',
+    country: 'UK',
+    source_url: 'https://www.punchdrunk.com/contact/',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct commercial email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Immersive Everywhere',
+    contact_name: 'Immersive Everywhere team',
+    website: 'https://immersiveeverywhere.com/',
+    country: 'UK',
+    source_url: 'https://immersiveeverywhere.com/contact/',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Bompas & Parr',
+    contact_name: 'Bompas & Parr team',
+    website: 'https://bompasandparr.com/',
+    country: 'UK',
+    source_url: 'https://bompasandparr.com/contact/',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Bearded Kitten',
+    contact_name: 'Bearded Kitten team',
+    website: 'https://beardedkitten.com/',
+    country: 'UK',
+    source_url: 'https://beardedkitten.com/contact/',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Little Lion Entertainment',
+    contact_name: 'Little Lion Entertainment team',
+    website: 'https://www.littlelionentertainment.com/',
+    country: 'UK',
+    source_url: 'https://www.littlelionentertainment.com/contact',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Escape Hunt UK',
+    contact_name: 'Escape Hunt UK team',
+    website: 'https://escapehunt.com/uk/',
+    country: 'UK',
+    source_url: 'https://escapehunt.com/uk/contact-us/',
+    postcode: 'UK',
+    notes: 'Contact route set to official UK website/contact route. Direct B2B email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'ClueQuest',
+    contact_name: 'ClueQuest team',
+    website: 'https://cluequest.co.uk/',
+    country: 'UK',
+    source_url: 'https://cluequest.co.uk/contact-us/',
+    postcode: 'London, UK',
+    notes: 'Contact route set to official website/contact route. Direct B2B email/phone not copied until clearly verified.'
   },
   {
     company_name: 'Nimlok UK',
@@ -99,6 +245,74 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     source_url: 'https://www.quadrant2design.com/',
     postcode: 'Poole / Bournemouth, UK',
     notes: 'Official website header lists design@quadrant2design.com and 01202 723 500.'
+  },
+  {
+    company_name: 'Skyline Whitespace',
+    contact_name: 'Skyline Whitespace team',
+    website: 'https://skylinewhitespace.com/',
+    country: 'UK',
+    source_url: 'https://skylinewhitespace.com/contact-us/',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Unibox',
+    contact_name: 'Unibox enquiries team',
+    email: 'sales@unibox.co.uk',
+    phone: '+44 (0)161 655 2100',
+    website: 'https://www.unibox.co.uk/',
+    country: 'UK',
+    source_url: 'https://www.unibox.co.uk/contact/',
+    postcode: 'Manchester, UK',
+    notes: 'Public commercial route captured for sales enquiries. Keep as prospect until outreach is approved.'
+  },
+  {
+    company_name: 'Octink',
+    contact_name: 'Octink team',
+    email: 'hello@octink.com',
+    phone: '+44 (0)20 8232 6868',
+    website: 'https://www.octink.com/',
+    country: 'UK',
+    source_url: 'https://www.octink.com/contact/',
+    postcode: 'Brentford / West London, UK',
+    notes: 'Public contact route captured for display, interiors and exhibition enquiries. Keep as prospect until outreach is approved.'
+  },
+  {
+    company_name: 'Scruffy Dog Creative Group',
+    contact_name: 'Scruffy Dog Creative Group team',
+    website: 'https://www.scruffydogltd.com/',
+    country: 'UK',
+    source_url: 'https://www.scruffydogltd.com/contact/',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct commercial email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Sarner International',
+    contact_name: 'Sarner International team',
+    website: 'https://www.sarner.com/',
+    country: 'UK',
+    source_url: 'https://www.sarner.com/contact/',
+    postcode: 'UK',
+    notes: 'Contact route set to official website/contact page. Direct commercial email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Katapult',
+    contact_name: 'Katapult team',
+    email: 'hello@katapult.co.uk',
+    website: 'https://www.katapult.co.uk/',
+    country: 'UK',
+    source_url: 'https://www.katapult.co.uk/contact/',
+    postcode: 'Derby, UK',
+    notes: 'Public contact route captured for themed attraction and experience design enquiries. Phone not copied until verified.'
+  },
+  {
+    company_name: 'Merlin Magic Making',
+    contact_name: 'Merlin Entertainments contact team',
+    website: 'https://www.merlinentertainments.biz/',
+    country: 'UK',
+    source_url: 'https://www.merlinentertainments.biz/contact-us/',
+    postcode: 'UK',
+    notes: 'Strategic prospect. Use Merlin Entertainments official corporate contact/procurement route. Direct Magic Making procurement email/phone not copied until clearly verified.'
   },
   {
     company_name: 'Stageco',
@@ -134,49 +348,6 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     notes: 'Official contact page lists ECA2 Paris, paris@eca2.com, (+33) 1 83 75 80 80 and 101-109 Rue Jean Jaurès, 92300 Levallois-Perret, France.'
   },
   {
-    company_name: 'SFL Group',
-    contact_name: 'd&b solutions contact team',
-    phone: '+44 (0)20 8254 4800',
-    website: 'https://dbsolutions.com/',
-    country: 'UK',
-    source_url: 'https://dbsolutions.com/contact-us/',
-    postcode: 'London SW19 3WL',
-    buyer_type: 'Immersive AV / event production / integrated experiences',
-    notes: 'SFL route now sits within d&b solutions. Official contact route lists +44 (0)20 8254 4800 and Wimbledon address. Email is protected on the public page, so not copied.'
-  },
-  {
-    company_name: 'Unibox',
-    contact_name: 'Unibox enquiries team',
-    email: 'sales@unibox.co.uk',
-    phone: '+44 (0)161 655 2100',
-    website: 'https://www.unibox.co.uk/',
-    country: 'UK',
-    source_url: 'https://www.unibox.co.uk/contact/',
-    postcode: 'Manchester, UK',
-    notes: 'Public commercial route captured for sales enquiries. Keep as prospect until outreach is approved.'
-  },
-  {
-    company_name: 'Octink',
-    contact_name: 'Octink team',
-    email: 'hello@octink.com',
-    phone: '+44 (0)20 8232 6868',
-    website: 'https://www.octink.com/',
-    country: 'UK',
-    source_url: 'https://www.octink.com/contact/',
-    postcode: 'Brentford / West London, UK',
-    notes: 'Public contact route captured for display, interiors and exhibition enquiries. Keep as prospect until outreach is approved.'
-  },
-  {
-    company_name: 'Katapult',
-    contact_name: 'Katapult team',
-    email: 'hello@katapult.co.uk',
-    website: 'https://www.katapult.co.uk/',
-    country: 'UK',
-    source_url: 'https://www.katapult.co.uk/contact/',
-    postcode: 'Derby, UK',
-    notes: 'Public contact route captured for themed attraction and experience design enquiries. Phone not copied until verified.'
-  },
-  {
     company_name: 'NUSSLI',
     contact_name: 'NUSSLI contact team',
     website: 'https://www.nussli.com/en/',
@@ -184,6 +355,15 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     source_url: 'https://www.nussli.com/en/contact/',
     postcode: 'Hüttwilen, Switzerland',
     notes: 'Official English contact route captured. Use contact page until a direct public email/phone is verified.'
+  },
+  {
+    company_name: 'Tinker imagineers',
+    contact_name: 'Tinker imagineers team',
+    website: 'https://tinker.nl/',
+    country: 'Netherlands / EU',
+    source_url: 'https://tinker.nl/contact/',
+    postcode: 'Utrecht / Netherlands',
+    notes: 'Official contact route captured for experience design, museums and brand experiences. Direct email/phone not copied until clearly verified.'
   },
   {
     company_name: 'Jora Vision',
@@ -195,6 +375,15 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     notes: 'Official English contact route captured for attraction design, scenic production and themed entertainment enquiries. Direct email/phone not copied until verified.'
   },
   {
+    company_name: 'Leisure Expert Group',
+    contact_name: 'Leisure Expert Group team',
+    website: 'https://www.leisureexpertgroup.com/',
+    country: 'Netherlands / EU',
+    source_url: 'https://www.leisureexpertgroup.com/contact/',
+    postcode: 'Netherlands',
+    notes: 'Official contact route captured for leisure design, attraction masterplanning and immersive projects. Direct email/phone not copied until clearly verified.'
+  },
+  {
     company_name: 'Kraftwerk Living Technologies',
     contact_name: 'Kraftwerk Living Technologies team',
     website: 'https://www.kraftwerk.at/',
@@ -202,6 +391,24 @@ export const VERIFIED_CONTACT_OVERRIDES: VerifiedContactOverride[] = [
     source_url: 'https://www.kraftwerk.at/contact/',
     postcode: 'Wels / Austria',
     notes: 'Official contact route captured for integrated media technology, immersive AV and attraction systems. Direct email/phone not copied until verified.'
+  },
+  {
+    company_name: 'facts and fiction',
+    contact_name: 'facts and fiction team',
+    website: 'https://www.factsfiction.de/',
+    country: 'Germany / EU',
+    source_url: 'https://www.factsfiction.de/en/contact/',
+    postcode: 'Germany',
+    notes: 'Official contact route captured for brand experience, museums and exhibitions. Direct email/phone not copied until clearly verified.'
+  },
+  {
+    company_name: 'Cercle',
+    contact_name: 'Cercle team',
+    website: 'https://cercle.io/',
+    country: 'France / EU',
+    source_url: 'https://cercle.io/',
+    postcode: 'Paris, France',
+    notes: 'Official website route captured for music event and immersive concert formats. Direct commercial email/phone not copied until clearly verified.'
   }
 ];
 
