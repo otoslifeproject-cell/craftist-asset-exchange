@@ -30,6 +30,23 @@ const TAG_LIBRARY = [
   'THEMING'
 ];
 
+const CATEGORY_LIBRARY = [
+  'Scenic build',
+  'Giant prop',
+  'Bar / counter',
+  'DJ booth',
+  'Lighting / AV',
+  'LED screen',
+  'Exhibition display',
+  'Immersive set',
+  'Festival / outdoor',
+  'Retail display',
+  'Attraction / theme',
+  'Escape room',
+  'Seasonal install',
+  'Stage set'
+];
+
 function normaliseTag(value: string) {
   return value
     .trim()
@@ -44,6 +61,10 @@ function tagLabel(value: string) {
   return value.replace(/-/g, ' ');
 }
 
+function normaliseCategory(value: string) {
+  return value.trim().toLowerCase();
+}
+
 function SubmitButton() {
   const { pending } = useFormStatus();
 
@@ -55,6 +76,8 @@ function SubmitButton() {
 }
 
 export default function NewItemForm({ action }: { action: ServerAction }) {
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [categoryInput, setCategoryInput] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [files, setFiles] = useState<File[]>([]);
@@ -62,6 +85,12 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const draftTag = normaliseTag(tagInput);
+  const draftCategory = normaliseCategory(categoryInput);
+
+  const filteredCategories = useMemo(() => {
+    if (!draftCategory) return CATEGORY_LIBRARY;
+    return CATEGORY_LIBRARY.filter((category) => normaliseCategory(category).includes(draftCategory));
+  }, [draftCategory]);
 
   const filteredSuggestions = useMemo(() => {
     const available = TAG_LIBRARY.filter((tag) => !selectedTags.includes(tag));
@@ -76,6 +105,17 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
 
     return filtered;
   }, [draftTag, selectedTags, tagInput]);
+
+  function selectCategory(category: string) {
+    setSelectedCategory(category);
+    setCategoryInput('');
+  }
+
+  function handleCategoryKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    if (filteredCategories[0]) selectCategory(filteredCategories[0]);
+  }
 
   function addTag(raw: string) {
     const next = normaliseTag(raw);
@@ -141,8 +181,7 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
         <div className="kicker">New asset</div>
         <h1>Build the opportunity sheet.</h1>
         <p>
-          Make this feel less like admin and more like a premium intake flow: define the asset,
-          match the audience, add the files, then create a clean draft ready for review.
+          Define the asset, match the audience, add the files, then create a clean draft ready for review.
         </p>
 
         <div className="journey-strip">
@@ -170,6 +209,7 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
       </section>
 
       <form action={action} className="grid new-asset-form" encType="multipart/form-data">
+        <input type="hidden" name="category" value={selectedCategory} readOnly />
         <input type="hidden" name="tags" value={selectedTags.join(', ')} readOnly />
         <input type="hidden" name="currency" value="gbp" />
         <input type="hidden" name="status" value="draft" />
@@ -200,20 +240,68 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
                 placeholder="What it is, what it was built for, its visual impact, and repurpose ideas."
               />
             </label>
+          </div>
 
-            <label>
-              Category
-              <input name="category" placeholder="Giant prop / bar / scenic build" />
-            </label>
+          <div className="tag-panel category-panel">
+            <div className="tag-panel-head">
+              <div>
+                <h3>Category</h3>
+                <p>Choose one fixed category. This keeps the asset library clean.</p>
+              </div>
+            </div>
+
+            <div className="selected-tags-wrap">
+              <div className="selected-tags-label">Selected category</div>
+              <div className="selected-tags">
+                {selectedCategory ? (
+                  <button type="button" className="soft-chip soft-chip--active" onClick={() => setSelectedCategory('')}>
+                    <span>{selectedCategory}</span>
+                    <strong>×</strong>
+                  </button>
+                ) : (
+                  <div className="soft-empty">No category selected yet.</div>
+                )}
+              </div>
+            </div>
+
+            <div className="tag-entry-row">
+              <input
+                value={categoryInput}
+                onChange={(event) => setCategoryInput(event.target.value)}
+                onKeyDown={handleCategoryKeyDown}
+                placeholder="Start typing: bar, scenic, lighting..."
+              />
+              <button
+                type="button"
+                className="button green tag-add-button"
+                onClick={() => filteredCategories[0] && selectCategory(filteredCategories[0])}
+              >
+                Set category
+              </button>
+            </div>
+
+            <div className="suggestion-block">
+              <div className="suggestion-title">Category options</div>
+              <div className="suggestion-grid">
+                {filteredCategories.map((category) => (
+                  <button
+                    key={category}
+                    type="button"
+                    className={`soft-chip ${selectedCategory === category ? 'soft-chip--active' : ''}`}
+                    onClick={() => selectCategory(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="tag-panel">
             <div className="tag-panel-head">
               <div>
                 <h3>Buyer tags</h3>
-                <p>
-                  Type a tag and hit Enter, or tap a suggestion. Selected tags stay visible as soft chips.
-                </p>
+                <p>Type a tag and hit Enter, or tap a suggestion. Selected tags stay visible as soft chips.</p>
               </div>
             </div>
 
@@ -245,11 +333,7 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
                 onKeyDown={handleTagKeyDown}
                 placeholder="Start typing: cherry, bar, festival, AV..."
               />
-              <button
-                type="button"
-                className="button green tag-add-button"
-                onClick={() => addTag(tagInput)}
-              >
+              <button type="button" className="button green tag-add-button" onClick={() => addTag(tagInput)}>
                 Add tag
               </button>
             </div>
@@ -298,14 +382,7 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
             <div className="upload-zone-group">
               <div className="upload-zone-label">Images, drawings and PDFs</div>
 
-              <input
-                ref={fileInputRef}
-                className="sr-only"
-                name="files"
-                type="file"
-                multiple
-                onChange={handleInputFiles}
-              />
+              <input ref={fileInputRef} className="sr-only" name="files" type="file" multiple onChange={handleInputFiles} />
 
               <div
                 className={`upload-dropzone ${dragActive ? 'is-dragging' : ''}`}
@@ -423,26 +500,17 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
           <div className="form-stack">
             <label>
               Included
-              <textarea
-                name="included"
-                placeholder="Structure, counters, fixings, lighting, drawings, assembly instructions..."
-              />
+              <textarea name="included" placeholder="Structure, counters, fixings, lighting, drawings, assembly instructions..." />
             </label>
 
             <label>
               Exclusions
-              <textarea
-                name="exclusions"
-                placeholder="Install crew, storage, certification, venue approval..."
-              />
+              <textarea name="exclusions" placeholder="Install crew, storage, certification, venue approval..." />
             </label>
 
             <label>
               Transport notes
-              <textarea
-                name="transport_notes"
-                placeholder="Direct dispatch. Buyer postcode required. Offload/lifting by buyer unless agreed."
-              />
+              <textarea name="transport_notes" placeholder="Direct dispatch. Buyer postcode required. Offload/lifting by buyer unless agreed." />
             </label>
           </div>
         </div>
@@ -454,7 +522,7 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
               <div className="section-kicker">Risk notes</div>
               <h2>Capture anything that protects the deal.</h2>
               <p className="section-intro">
-                These notes do not need to be dramatic — just enough to help internal review and keep the asset page clean later.
+                These notes help internal review and keep the asset page clean later.
               </p>
             </div>
           </div>
@@ -462,26 +530,17 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
           <div className="grid compact-grid">
             <label className="span-4">
               Compliance notes
-              <textarea
-                name="compliance_notes"
-                placeholder="Fire rating, electrical status, decorative only/load-bearing, indoor/outdoor suitability."
-              />
+              <textarea name="compliance_notes" placeholder="Fire rating, electrical status, decorative only/load-bearing, indoor/outdoor suitability." />
             </label>
 
             <label className="span-4">
               Condition notes
-              <textarea
-                name="condition_notes"
-                placeholder="Used once, post-event condition, inspection status."
-              />
+              <textarea name="condition_notes" placeholder="Used once, post-event condition, inspection status." />
             </label>
 
             <label className="span-4">
               Assembly notes
-              <textarea
-                name="assembly_notes"
-                placeholder="Requires competent installers / instructions included."
-              />
+              <textarea name="assembly_notes" placeholder="Requires competent installers / instructions included." />
             </label>
           </div>
         </div>
@@ -491,9 +550,7 @@ export default function NewItemForm({ action }: { action: ServerAction }) {
             <div className="submit-copy">
               <div className="submit-kicker">Ready for review</div>
               <h3>Create the draft asset</h3>
-              <p>
-                This saves the record as a draft. You can tighten the page, inspect the files and publish when ready.
-              </p>
+              <p>This saves the record as a draft. You can inspect and publish when ready.</p>
             </div>
             <SubmitButton />
           </div>
